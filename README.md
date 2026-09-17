@@ -21,5 +21,5 @@ Use this if the repo is named `tdk`.
    - still short: `tdk`
 2. Copy these files to that repo.
 3. Enable GitHub Pages from the repo settings.
-4. Keep CLI binaries in `tdk-landscape/tdk-cli-releases-public`.
+4. Keep CLI binaries in `tdk-landscape/tdk-cli-releases`.
 
