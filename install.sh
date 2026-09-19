@@ -18,6 +18,7 @@ need curl
 need uname
 need chmod
 need mkdir
+need tar
 
 os="$(uname -s | tr '[:upper:]' '[:lower:]')"
 arch="$(uname -m)"
@@ -37,21 +38,42 @@ esac
 asset="tdk-${platform}-${cpu}"
 url="https://github.com/${OWNER}/${REPO}/releases/latest/download/${asset}"
 
+# Fixed filename (no version in it), so this always resolves to whatever
+# release is currently "latest" - unlike the per-release zip, which is
+# named with its own tag and can't be found this way.
+engine_asset="tdk-cli-engine.tar.gz"
+engine_url="https://github.com/${OWNER}/${REPO}/releases/latest/download/${engine_asset}"
+
 install_dir="${TDK_INSTALL_DIR:-/usr/local/bin}"
 tmp="${TMPDIR:-/tmp}/tdk.$$"
+engine_tmp="${TMPDIR:-/tmp}/tdk-engine.$$.tar.gz"
 
 echo "Installing ${asset}..."
 curl -fsSL "$url" -o "$tmp" || fail "download failed: $url"
 chmod +x "$tmp"
 
+# The compiled binary has no source checkout to find engine/ in, so it
+# looks for a tdk-cli/ folder next to itself (see
+# cli/src/generator/template-engine.ts, vendorTdkExtension). Without this,
+# `tdk project`/`tdk up` fail with "TDK extension not found".
+echo "Installing bundled engine..."
+curl -fsSL "$engine_url" -o "$engine_tmp" || fail "download failed: $engine_url"
+
 if [ -w "$install_dir" ]; then
   mkdir -p "$install_dir"
   mv "$tmp" "${install_dir}/${BIN_NAME}"
+  rm -rf "${install_dir}/tdk-cli"
+  mkdir -p "${install_dir}/tdk-cli"
+  tar -xzf "$engine_tmp" -C "${install_dir}/tdk-cli" --strip-components=1
 else
   need sudo
   sudo mkdir -p "$install_dir"
   sudo mv "$tmp" "${install_dir}/${BIN_NAME}"
+  sudo rm -rf "${install_dir}/tdk-cli"
+  sudo mkdir -p "${install_dir}/tdk-cli"
+  sudo tar -xzf "$engine_tmp" -C "${install_dir}/tdk-cli" --strip-components=1
 fi
+rm -f "$engine_tmp"
 
 echo "Installed: ${install_dir}/${BIN_NAME}"
 "${install_dir}/${BIN_NAME}" --version || true
