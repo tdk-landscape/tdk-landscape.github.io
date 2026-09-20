@@ -48,8 +48,22 @@ install_dir="${TDK_INSTALL_DIR:-/usr/local/bin}"
 tmp="${TMPDIR:-/tmp}/tdk.$$"
 engine_tmp="${TMPDIR:-/tmp}/tdk-engine.$$.tar.gz"
 
+download() {
+  src="$1"
+  dest="$2"
+  n=0
+  while [ "$n" -lt 8 ]; do
+    if curl -fsSL "$src" -o "$dest"; then
+      return 0
+    fi
+    n=$((n + 1))
+    sleep $((n * 2))
+  done
+  return 1
+}
+
 echo "Installing ${asset}..."
-curl -fsSL "$url" -o "$tmp" || fail "download failed: $url"
+download "$url" "$tmp" || fail "download failed: $url"
 chmod +x "$tmp"
 
 # The compiled binary has no source checkout to find engine/ in, so it
@@ -57,7 +71,7 @@ chmod +x "$tmp"
 # cli/src/generator/template-engine.ts, vendorTdkExtension). Without this,
 # `tdk project`/`tdk up` fail with "TDK extension not found".
 echo "Installing bundled engine..."
-curl -fsSL "$engine_url" -o "$engine_tmp" || fail "download failed: $engine_url"
+download "$engine_url" "$engine_tmp" || fail "download failed: $engine_url"
 
 if [ -w "$install_dir" ]; then
   mkdir -p "$install_dir"
