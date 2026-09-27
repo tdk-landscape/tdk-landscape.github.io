@@ -1,18 +1,14 @@
-# TDK CLI install page
+# tdk-landscape.github.io
 
-Free short URL options:
+Short install URL and JSON schema host for [TDK CLI](https://github.com/tdk-landscape/tdk-cli-core).
+
+## Install
 
 ```sh
 curl -fsSL https://tdk-landscape.github.io/install.sh | sh
 ```
 
-Use this if the repo is named `tdk-landscape.github.io`.
-
-```sh
-curl -fsSL https://tdk-landscape.github.io/tdk/install.sh | sh
-```
-
-Use this if the repo is named `tdk`.
+The script downloads the latest binary from [tdk-cli-releases](https://github.com/tdk-landscape/tdk-cli-releases/releases/latest). Prefer npm? `npm install -g @tdk-landscape/tdk-cli-core`.
 
 ## JSON Schema
 
@@ -20,14 +16,8 @@ Resource config schema, referenced from every `service.json` via `$schema`:
 
 - https://tdk-landscape.github.io/schema.service.json
 
-Source of truth is `tdk-cli-core/engine/schemas/service-schema.json`; copy changes here to republish.
+Source of truth is [`engine/schemas/service-schema.json`](https://github.com/tdk-landscape/tdk-cli-core/blob/main/engine/schemas/service-schema.json) in tdk-cli-core; copy changes here to republish.
 
-## Publish
+---
 
-1. Create a public GitHub repo:
-   - shortest: `tdk-landscape.github.io`
-   - still short: `tdk`
-2. Copy these files to that repo.
-3. Enable GitHub Pages from the repo settings.
-4. Keep CLI binaries in `tdk-landscape/tdk-cli-releases`.
-
+⭐ **Using TDK?** [Star tdk-cli-core](https://github.com/tdk-landscape/tdk-cli-core) so other developers can find it.
