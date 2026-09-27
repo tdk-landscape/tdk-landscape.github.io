@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TDK CLI</title>
     <meta name="description" content="Run 100 microservices on a 16 GB laptop without Kubernetes. Install the TDK CLI in one command.">
+    <meta name="theme-color" content="#0b0d10">
+    <link rel="canonical" href="https://tdk-landscape.github.io/">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b0d10'/%3E%3Ctext x='8' y='42' font-family='ui-monospace,Menlo,Consolas,monospace' font-size='28' fill='%23e6f18f'%3E%3E_%3C/text%3E%3C/svg%3E">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tdk-landscape.github.io/">
     <meta property="og:title" content="TDK CLI">
     <meta property="og:description" content="Run 100 microservices on a 16 GB laptop without Kubernetes.">
     <meta property="og:image" content="https://tdk-landscape.github.io/tdk-website/assets/images/tdk-social-card.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TDK CLI">
+    <meta name="twitter:description" content="Run 100 microservices on a 16 GB laptop without Kubernetes.">
+    <meta name="twitter:image" content="https://tdk-landscape.github.io/tdk-website/assets/images/tdk-social-card.png">
     <style>
       :root {
         color-scheme: dark;
@@ -35,19 +44,50 @@
         font-size: 18px;
         line-height: 1.55;
       }
+      .installer {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
       pre {
         overflow-x: auto;
+        margin: 0;
         padding: 18px 20px;
         border: 1px solid #2b3038;
         background: #11151b;
         border-radius: 8px;
+        flex: 1;
+        min-width: 0;
       }
       code {
         font: 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         color: #e6f18f;
       }
+      .copy {
+        flex-shrink: 0;
+        padding: 6px 10px;
+        font: 12px ui-sans-serif, system-ui, sans-serif;
+        color: #b8b4aa;
+        background: #1a1f27;
+        border: 1px solid #2b3038;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .copy:hover {
+        color: #f4f1e8;
+        border-color: #3a4048;
+      }
+      .npm-alt {
+        margin-top: 8px;
+        font-size: 14px;
+      }
       a {
         color: #8ec5ff;
+      }
+      a:focus-visible,
+      .copy:focus-visible {
+        outline: 2px solid #8ec5ff;
+        outline-offset: 2px;
       }
     </style>
   </head>
@@ -55,7 +95,11 @@
     <main>
       <h1>TDK CLI</h1>
       <p>Install the latest TDK CLI binary for Linux, macOS, Arch, and Omarchy.</p>
-      <pre><code>curl -fsSL https://tdk-landscape.github.io/install.sh | sh</code></pre>
+      <div class="installer">
+        <pre><code id="install-cmd">curl -fsSL https://tdk-landscape.github.io/install.sh | sh</code></pre>
+        <button class="copy" type="button" aria-label="Copy install command">Copy</button>
+      </div>
+      <p class="npm-alt">Prefer npm? <code>npm install -g @tdk-landscape/tdk-cli-core</code></p>
       <p>
         Binaries are published at
         <a href="https://github.com/tdk-landscape/tdk-cli-releases/releases/latest">tdk-cli-releases</a>.
@@ -66,5 +110,17 @@
         <a href="https://github.com/tdk-landscape/tdk-cli-core">⭐ Star TDK CLI on GitHub</a>
       </p>
     </main>
+    <script>
+      document.querySelector(".copy").addEventListener("click", async (event) => {
+        const button = event.currentTarget;
+        try {
+          await navigator.clipboard.writeText(document.getElementById("install-cmd").textContent);
+          button.textContent = "Copied!";
+        } catch {
+          button.textContent = "Failed";
+        }
+        setTimeout(() => { button.textContent = "Copy"; }, 1500);
+      });
+    </script>
   </body>
 </html>
