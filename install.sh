@@ -47,7 +47,18 @@ engine_url="https://github.com/${OWNER}/${REPO}/releases/latest/download/${engin
 
 checksums_url="https://github.com/${OWNER}/${REPO}/releases/latest/download/checksums.txt"
 
-install_dir="${TDK_INSTALL_DIR:-/usr/local/bin}"
+# Never runs sudo. Uses TDK_INSTALL_DIR if set, else /usr/local/bin when it's
+# writable, else ~/.local/bin.
+if [ -n "${TDK_INSTALL_DIR:-}" ]; then
+  install_dir="$TDK_INSTALL_DIR"
+  mkdir -p "$install_dir" 2>/dev/null || true
+  [ -w "$install_dir" ] || fail "$install_dir is not writable. Pick another TDK_INSTALL_DIR, or download the script and run it with sudo yourself."
+elif [ -w /usr/local/bin ]; then
+  install_dir="/usr/local/bin"
+else
+  install_dir="${HOME}/.local/bin"
+  mkdir -p "$install_dir"
+fi
 tmp="${TMPDIR:-/tmp}/tdk.$$"
 engine_tmp="${TMPDIR:-/tmp}/tdk-engine.$$.tar.gz"
 sums_tmp="${TMPDIR:-/tmp}/tdk-checksums.$$.txt"
@@ -108,22 +119,27 @@ download "$checksums_url" "$sums_tmp" || fail "download failed: $checksums_url"
 verify "$tmp" "$asset" required
 verify "$engine_tmp" "$engine_asset" optional
 
-if [ -w "$install_dir" ]; then
-  mkdir -p "$install_dir"
-  mv "$tmp" "${install_dir}/${BIN_NAME}"
-  rm -rf "${install_dir}/tdk-cli"
-  mkdir -p "${install_dir}/tdk-cli"
-  tar -xzf "$engine_tmp" -C "${install_dir}/tdk-cli" --strip-components=1
-else
-  need sudo
-  sudo mkdir -p "$install_dir"
-  sudo mv "$tmp" "${install_dir}/${BIN_NAME}"
-  sudo rm -rf "${install_dir}/tdk-cli"
-  sudo mkdir -p "${install_dir}/tdk-cli"
-  sudo tar -xzf "$engine_tmp" -C "${install_dir}/tdk-cli" --strip-components=1
-fi
+mv "$tmp" "${install_dir}/${BIN_NAME}"
+rm -rf "${install_dir}/tdk-cli"
+mkdir -p "${install_dir}/tdk-cli"
+tar -xzf "$engine_tmp" -C "${install_dir}/tdk-cli" --strip-components=1
 rm -f "$engine_tmp"
 
 echo "Installed: ${install_dir}/${BIN_NAME}"
 "${install_dir}/${BIN_NAME}" --version || true
+
+case ":${PATH}:" in
+  *":${install_dir}:"*)
+    found="$(command -v "$BIN_NAME" 2>/dev/null || true)"
+    if [ -n "$found" ] && [ "$found" != "${install_dir}/${BIN_NAME}" ]; then
+      echo "Warning: ${found} comes first on your PATH and will run instead of this install." >&2
+    fi
+    ;;
+  *)
+    echo
+    echo "${install_dir} is not on your PATH. Add this to your shell profile:"
+    echo "  export PATH=\"${install_dir}:\$PATH\""
+    ;;
+esac
+echo "Next: tdk doctor"
 
