@@ -79,8 +79,8 @@ sha256_of() {
 
 # verify FILE ASSET_NAME required|optional
 # checksums.txt lines are "<sha256>  <name>" (or "<sha256> *<name>").
-# Releases up to 1.3.51 list only the binaries, so the engine is checked
-# only when its line is present.
+# Older releases list only the binaries, so the engine is checked only
+# when its line is present.
 verify() {
   expected="$(awk -v n="$2" '$2 == n || $2 == "*" n { print $1; exit }' "$sums_tmp")"
   if [ -z "$expected" ]; then
