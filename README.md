@@ -10,9 +10,9 @@ curl -fsSL https://tdk-landscape.github.io/install.sh | sh
 
 The script downloads the latest binary from [tdk-cli-releases](https://github.com/tdk-landscape/tdk-cli-releases/releases/latest). Prefer npm? `npm install -g @tdk-landscape/tdk-cli-core`.
 
-### Windows 10/11 (AMD64)
+### Windows 10/11 (AMD64): CLI inspection
 
-Native Windows uses Docker Desktop with Linux containers. Install Docker Desktop and [Tilt for Windows](https://docs.tilt.dev/install.html), start Docker Desktop, then use PowerShell:
+The latest release includes `tdk-windows-amd64.exe` and its bundled runtime assets. Install the CLI from PowerShell:
 
 ```powershell
 irm https://tdk-landscape.github.io/install.ps1 | iex
@@ -25,7 +25,15 @@ Invoke-WebRequest https://tdk-landscape.github.io/install.ps1 -OutFile install-t
 powershell -ExecutionPolicy Bypass -File .\install-tdk.ps1
 ```
 
-The installer requires a TDK release containing `tdk-windows-amd64.exe`; it will report clearly if the latest release does not include that asset yet. After installing, open a new PowerShell window and run `tdk --version`, then `tdk doctor`. Windows ARM64 is not supported by the v1 binary. WSL2 Ubuntu works as Linux.
+After installing, open a new PowerShell window and run:
+
+```powershell
+tdk --version
+tdk runtime --check-assets
+tdk doctor
+```
+
+Native Windows supports CLI inspection only. `tdk doctor` explains that running a landscape requires Ubuntu in WSL2; use the [WSL2 setup guide](https://github.com/tdk-landscape/tdk-cli-core/blob/main/docs/wsl2.md) for `tdk project` and `tdk up`. Windows ARM64 is not supported.
 
 ## JSON Schema
 
