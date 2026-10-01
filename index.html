@@ -94,12 +94,12 @@
   <body>
     <main>
       <h1>TDK CLI</h1>
-      <p>Install TDK CLI on Linux and macOS. Native Windows AMD64 installation is available with releases that include the Windows binary.</p>
+      <p>Install TDK CLI on Linux or macOS for the full local runtime. The latest release also includes a Windows AMD64 CLI for inspection; landscape startup on Windows uses Ubuntu in WSL2.</p>
       <div class="installer">
         <pre><code id="install-cmd">curl -fsSL https://tdk-landscape.github.io/install.sh | sh</code></pre>
         <button class="copy" type="button" aria-label="Copy install command">Copy</button>
       </div>
-      <p class="npm-alt">Windows 10/11 (AMD64): install Docker Desktop in Linux container mode and <a href="https://docs.tilt.dev/install.html">Tilt for Windows</a>, then run <code>irm https://tdk-landscape.github.io/install.ps1 | iex</code> in PowerShell. <a href="https://tdk-landscape.github.io/tdk-website/docs/quickstart/">Windows setup guide</a>.</p>
+      <p class="npm-alt">Windows AMD64: install from PowerShell with <code>irm https://tdk-landscape.github.io/install.ps1 | iex</code>, then run <code>tdk --version</code>, <code>tdk runtime --check-assets</code>, and <code>tdk doctor</code>. Native Windows is for CLI inspection; use <a href="https://github.com/tdk-landscape/tdk-cli-core/blob/main/docs/wsl2.md">WSL2 Ubuntu</a> for <code>tdk project</code> and <code>tdk up</code>.</p>
       <p class="npm-alt">Prefer npm? <code>npm install -g @tdk-landscape/tdk-cli-core</code></p>
       <p>
         Binaries are published at
