@@ -10,7 +10,7 @@ curl -fsSL https://tdk-landscape.github.io/install.sh | sh
 
 The script downloads the latest binary from [tdk-cli-releases](https://github.com/tdk-landscape/tdk-cli-releases/releases/latest). Prefer npm? `npm install -g @tdk-landscape/tdk-cli-core`.
 
-### Windows 10/11 (AMD64): CLI inspection
+### Windows AMD64: CLI inspection
 
 The latest release includes `tdk-windows-amd64.exe` and its bundled runtime assets. Install the CLI from PowerShell:
 
