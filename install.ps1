@@ -90,6 +90,8 @@ try {
     $versionOutput = & (Join-Path $installDir 'tdk.exe') --version 2>&1 | Select-Object -First 1
     Write-Host "TDK installed to $(Join-Path $installDir 'tdk.exe') ($versionOutput)."
     Write-Host 'Close this terminal and open a new one, then run tdk --version.'
+    Write-Host 'For AI agents, configure your MCP client to launch tdk mcp over local stdio:'
+    Write-Host '  https://github.com/tdk-landscape/tdk-cli-core/blob/main/docs/agent-tooling/README.md'
 } catch {
     Write-Error $_
     exit 1

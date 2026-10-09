@@ -142,4 +142,5 @@ case ":${PATH}:" in
     ;;
 esac
 echo "Next: tdk doctor"
-
+echo "For AI agents, configure your MCP client to launch tdk mcp over local stdio:"
+echo "  https://github.com/tdk-landscape/tdk-cli-core/blob/main/docs/agent-tooling/README.md"
